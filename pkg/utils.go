@@ -1,7 +1,9 @@
 package pkg
 
 import (
+	"strings"
 	"unicode"
+
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
@@ -25,3 +27,10 @@ func ConvertTemp( temp float64 ) (float64){
 	return temp + K
 
 }
+
+func Replace(s string) (string){
+	
+	return strings.Replace(RemoveAcentos(s), " ", "%20", -1)
+
+}
+

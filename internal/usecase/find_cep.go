@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -21,7 +22,7 @@ type ViaCEP struct {
 
 
 func FindCep(cep string) (*ViaCEP, error){
-	resp, err := http.Get("http://viacep.com.br/ws/" + cep + "/json/")
+	resp, err := http.Get(fmt.Sprintf("http://viacep.com.br/ws/%s/json/", cep))
 	if err != nil{
 		return nil, err
 	}
