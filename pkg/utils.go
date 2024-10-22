@@ -1,4 +1,4 @@
-package pkg
+package pkg_test
 
 import (
 	"strings"
@@ -11,26 +11,28 @@ import (
 
 
 
-func RemoveAcentos(s string) string  {
+func RemoveAccents(s string) (string, error)  {
 	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
 	output, _, e := transform.String(t, s)
 	if e != nil {
-		panic(e)
+		return "", e
 	}
-	return output
+	return output, nil
 }
 
 
-func ConvertTemp( temp float64 ) (float64){
+func ConvertTemp( tempC float64 ) (float64, error){
 
 	const K = 273
-	return temp + K
+	return tempC + K, nil
 
 }
 
-func Replace(s string) (string){
+func ReplaceAndRemoveAccents(s string) (string){
 	
-	return strings.Replace(RemoveAcentos(s), " ", "%20", -1)
+	r, _ := RemoveAccents(s)
+	
+	return strings.Replace(r, " ", "%20", -1)
 
 }
 

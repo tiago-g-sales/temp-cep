@@ -46,14 +46,18 @@ func BuscaCepHandler (w http.ResponseWriter, r *http.Request) {
 		return		
 	}
 
-	cep, err :=usecase.FindCep(cepParam)
+	clientCep := usecase.NewHTTPClient(http.Client{})
+
+	cep, err :=usecase.FindCepHTTPClient.FindCep(clientCep, cepParam)
 	if err != nil{
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(CAN_NOT_FIND_ZIPCODE)
 		return
 	}
 
-	temp , err := usecase.FindTemp(cep.Localidade)
+	clientTemp := usecase.NewHTTPClientTemp(http.Client{})
+
+	temp , err := usecase.FindTempHTTPClient.FindTemp(clientTemp, cep.Localidade)
 	if err != nil{
 		w.WriteHeader(http.StatusInternalServerError)
 		return		

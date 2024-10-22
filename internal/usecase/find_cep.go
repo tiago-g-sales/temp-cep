@@ -5,24 +5,26 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/tiago-g-sales/temp-cep/internal/usecase/model"
 )
 
-type ViaCEP struct {
-	Cep         string `json:"cep"`
-	Logradouro  string `json:"logradouro"`
-	Complemento string `json:"complemento"`
-	Bairro      string `json:"bairro"`
-	Localidade  string `json:"localidade"`
-	Uf          string `json:"uf"`
-	Ibge        string `json:"ibge"`
-	Gia         string `json:"gia"`
-	Ddd         string `json:"ddd"`
-	Siafi       string `json:"siafi"`
+type FindCepHTTPClient interface {
+    FindCep(cep string) (*model.ViaCEP, error)
+}
+
+type HTTPClient struct {
+    client *http.Client
+}
+
+func NewHTTPClient (client http.Client) (*HTTPClient){
+	return &HTTPClient{client: &client}
 }
 
 
-func FindCep(cep string) (*ViaCEP, error){
-	resp, err := http.Get(fmt.Sprintf("http://viacep.com.br/ws/%s/json/", cep))
+func (h *HTTPClient) FindCep( cep string) (*model.ViaCEP, error){
+	
+	resp, err := h.client.Get(fmt.Sprintf("http://viacep.com.br/ws/%s/json/", cep))
 	if err != nil{
 		return nil, err
 	}
@@ -32,7 +34,7 @@ func FindCep(cep string) (*ViaCEP, error){
 		return nil, err
 	}
 
-	var c ViaCEP
+	var c model.ViaCEP
 	err= json.Unmarshal(body, &c)
 	if err != nil{
 		return nil, err
