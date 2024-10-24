@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/model"
+	"github.com/tiago-g-sales/temp-cep/internal/model"
 )
 
 type FindCepHTTPClient interface {

@@ -2,7 +2,7 @@ package mocks
 
 import (
 	"github.com/stretchr/testify/mock"
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/model"
+	"github.com/tiago-g-sales/temp-cep/internal/model"
 )
 
 

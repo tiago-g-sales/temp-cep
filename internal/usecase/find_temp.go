@@ -7,9 +7,8 @@ import (
 	"net/http"
 
 	"github.com/tiago-g-sales/temp-cep/configs"
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/model"
-	pkg_test "github.com/tiago-g-sales/temp-cep/pkg"
-
+	"github.com/tiago-g-sales/temp-cep/internal/model"
+	"github.com/tiago-g-sales/temp-cep/pkg"
 	"github.com/valyala/fastjson"
 )
 
@@ -30,13 +29,12 @@ func (h *HTTPClientTemp) FindTemp(loc string) (*model.Temperatura, error) {
 
 	configs, err := configs.LoadConfig(".")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	localidade := pkg_test.ReplaceAndRemoveAccents(loc)
+	localidade, _ := pkg.RemoveAccents(loc)
 
-	resp, err := http.Get(fmt.Sprintf("https://api.weatherapi.com/v1/current.json?q=%s&lang=json&key=%s",localidade , configs.API_KEY))
-
+	resp, err := h.client.Get(fmt.Sprintf("https://api.weatherapi.com/v1/current.json?q=%s&lang=json&key=%s",localidade , configs.API_KEY))
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +55,7 @@ func (h *HTTPClientTemp) FindTemp(loc string) (*model.Temperatura, error) {
 	temp := model.Temperatura{}
 	json.Unmarshal([]byte(v.GetObject("current").String()), &temp)
 
-	temp.Temp_K, _ = pkg_test.ConvertTemp(temp.Temp_C)
+	temp.Temp_K, _ = pkg.ConvertTemp(temp.Temp_C)
 
 	return &temp, nil
 }

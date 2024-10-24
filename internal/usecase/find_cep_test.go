@@ -1,12 +1,14 @@
 package usecase_test
 
 import (
+
+	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/tiago-g-sales/temp-cep/internal/mocks"
+	"github.com/tiago-g-sales/temp-cep/internal/model"
 	"github.com/tiago-g-sales/temp-cep/internal/usecase"
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/mocks"
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/model"
 )
 
 
@@ -28,7 +30,7 @@ func TestFindCep(t *testing.T ){
 
 
 	c := mocks.NewMockClientCep()
-	c.On("FindCep", endereco.Cep,).Return(&model.ViaCEP{
+	c.On("FindCep", endereco.Cep,).Return(&model.ViaCEP {
 		Cep: endereco.Cep,
 		Logradouro: "Rua Tancredo de Almeida Neves",
 		Complemento: "",
@@ -41,10 +43,8 @@ func TestFindCep(t *testing.T ){
 		Siafi: "6545",
 	}, nil)
 
-	temp , err := usecase.FindCepHTTPClient.FindCep(c, endereco.Cep)
-	if err != nil {
-		panic(err)
-	}
+	temp , err := usecase.NewHTTPClient(http.Client{}).FindCep(endereco.Cep)	
+	assert.NotNil(t, temp, err)
 	assert.Equal(t, temp.Cep, endereco.Cep )
 	assert.Equal(t, temp.Logradouro, endereco.Logradouro )
 	assert.Equal(t, temp.Bairro, endereco.Bairro)
@@ -55,5 +55,24 @@ func TestFindCep(t *testing.T ){
 	assert.Equal(t, temp.Localidade, endereco.Localidade)
 	assert.Equal(t, temp.Uf, endereco.Uf)
 	assert.Equal(t, temp.Siafi, endereco.Siafi)
+
+	
+
+}
+
+func TestFindCepEmpty(t *testing.T ){
+
+	
+	temp , _ := usecase.NewHTTPClient(http.Client{}).FindCep("")	
+	assert.Empty(t, temp)
+
+
+}
+
+
+func TestNewHTTPClient(t *testing.T) {
+	
+	client := usecase.NewHTTPClient(http.Client{})
+	assert.NotNil(t, client)
 
 }

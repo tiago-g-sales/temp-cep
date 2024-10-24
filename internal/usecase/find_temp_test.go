@@ -1,13 +1,15 @@
 package usecase_test
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/tiago-g-sales/temp-cep/internal/mocks"
+	"github.com/tiago-g-sales/temp-cep/internal/model"
 	"github.com/tiago-g-sales/temp-cep/internal/usecase"
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/mocks"
-	"github.com/tiago-g-sales/temp-cep/internal/usecase/model"
-	pkg_test "github.com/tiago-g-sales/temp-cep/pkg"
+	"github.com/tiago-g-sales/temp-cep/pkg"
+	_ "golang.org/x/crypto/x509roots/fallback"
 )
 
 
@@ -32,7 +34,7 @@ func TestFindTemp(t *testing.T ){
 	if err != nil {
 		panic(err)
 	}
-	resp , err := pkg_test.ConvertTemp(temp.Temp_C)
+	resp , err := pkg.ConvertTemp(temp.Temp_C)
 	assert.Nil(t, err)
 	assert.Equal(t, temp.Temp_C, temperatura.Temp_C )
 	assert.Equal(t, temp.Temp_F, temperatura.Temp_F)
@@ -41,4 +43,11 @@ func TestFindTemp(t *testing.T ){
 }
 
 
+
+func TestNewHTTPClieTemp(t *testing.T) {
+	
+	client := usecase.NewHTTPClientTemp(http.Client{})
+	assert.NotNil(t, client)
+
+}
 
