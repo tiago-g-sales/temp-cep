@@ -32,7 +32,7 @@ func (h *HTTPClientTemp) FindTemp(loc string) (*model.Temperatura, error) {
 		return nil, err
 	}
 
-	localidade, _ := pkg.RemoveAccents(loc)
+	localidade := pkg.ReplaceAndRemoveAccents(loc)
 
 	resp, err := h.client.Get(fmt.Sprintf("https://api.weatherapi.com/v1/current.json?q=%s&lang=json&key=%s",localidade , configs.API_KEY))
 	if err != nil {

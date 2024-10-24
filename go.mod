@@ -6,7 +6,6 @@ require (
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
 	github.com/valyala/fastjson v1.6.4
-	golang.org/x/crypto/x509roots/fallback v0.0.0-20241022195102-750a45fe5e47
 	golang.org/x/text v0.14.0
 )
 

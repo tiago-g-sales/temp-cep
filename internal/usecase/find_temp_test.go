@@ -9,7 +9,7 @@ import (
 	"github.com/tiago-g-sales/temp-cep/internal/model"
 	"github.com/tiago-g-sales/temp-cep/internal/usecase"
 	"github.com/tiago-g-sales/temp-cep/pkg"
-	_ "golang.org/x/crypto/x509roots/fallback"
+
 )
 
 
