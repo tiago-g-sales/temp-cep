@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -9,6 +10,18 @@ import (
 	"github.com/tiago-g-sales/temp-cep/internal/model"
 )
 
+var (
+    ErrCepNotFound = errors.New("cep not found")
+    ErrTempNotFound = errors.New("temperature not found")
+)
+
+type Cep struct {
+    Localidade string `json:"localidade"`
+}
+
+type Temp struct {
+    Temperature int `json:"temperature"`
+}
 type FindCepHTTPClient interface {
     FindCep(cep string) (*model.ViaCEP, error)
 }
@@ -42,3 +55,6 @@ func (h *HTTPClient) FindCep( cep string) (*model.ViaCEP, error){
 
 	return &c, nil
 }
+
+
+
